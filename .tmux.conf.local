@@ -1,0 +1,82 @@
+unbind C-b
+set -g prefix C-s
+bind-key -r C-s send-prefix
+
+bind-key r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
+
+# soften status bar color from harsh green to light gray
+set -g status-bg '#0FADCA'
+set -g status-fg '#000000'
+
+# Allow vim splits and tmux panes to integrate together
+is_vim='echo "#{pane_current_command}" | grep -iqE "(^|\/)g?(view|n?vim?)(diff)?$"'
+bind -n C-h if-shell "$is_vim" "send-keys C-h" "select-pane -L"
+bind -n C-j if-shell "$is_vim" "send-keys C-j" "select-pane -D"
+bind -n C-k if-shell "$is_vim" "send-keys C-k" "select-pane -U"
+bind -n C-l if-shell "$is_vim" "send-keys C-l" "select-pane -R"
+bind -n C-\ if-shell "$is_vim" "send-keys C-\\" "select-pane -l"
+
+set-option -g default-terminal "screen-256color"
+set-option -g status-keys "emacs"
+
+set-option -g status-left-length 50
+
+# Set status bar - bottom right
+set-option -g status-right " #(battery -t)  #(date '+%a, %b %d - %I:%M') "
+
+# Split windows keeping path context
+bind-key - split-window -v  -c '#{pane_current_path}'
+bind-key \ split-window -h  -c '#{pane_current_path}'
+
+# Resize Tmux Panes
+bind -n S-Left resize-pane -L 2
+bind -n S-Right resize-pane -R 2
+bind -n S-Down resize-pane -D 1
+bind -n S-Up resize-pane -U 1
+
+bind -n C-Left resize-pane -L 10
+bind -n C-Right resize-pane -R 10
+bind -n C-Down resize-pane -D 5
+bind -n C-Up resize-pane -U 5
+
+# Create a new window with path context
+bind c new-window -c '#{pane_current_path}'
+
+# Windows numbers start from 1 instead of 0
+set-option -g base-index 1
+set-option -g renumber-windows on
+
+# Send pane to a new window
+bind-key b break-pane -d
+
+# Display windows
+bind-key C-j choose-tree
+
+# Use vim keybindings in copy mode
+setw -g mode-keys vi
+
+# Setup 'v' to begin selection as in Vim
+bind-key -t vi-copy v begin-selection
+bind-key -t vi-copy y copy-pipe "reattach-to-user-namespace pbcopy"
+
+# Update default binding of `Enter` to also use copy-pipe
+unbind -t vi-copy Enter
+bind-key -t vi-copy Enter copy-pipe "reattach-to-user-namespace pbcopy"
+
+# Open HTOP in a pane
+bind-key h split-window -h "htop"
+
+# Fuzzy select available tmux sessions
+bind C-j split-window -v "tmux list-sessions | sed -E 's/:.*$//' | grep -v \"^$(tmux display-message -p '#S')\$\" | fzf --reverse | xargs tmux switch-client -t"
+
+# Swap panes
+bind-key s display-panes\; command-prompt -p "pane #: "  "swap-pane -t '%%'"
+
+# Prompted join-pane
+bind-key j command-prompt -p "join pane from: "  "join-pane -h -s '%%'"
+
+# Close session and switch to next if available
+bind-key K run-shell 'tmux switch-client -n \; kill-session -t "$(tmux display-message -p "#S")" || tmux kill-session'
+
+# Create new session from path context
+bind-key C-b send-keys 'tat && exit' 'C-m'
