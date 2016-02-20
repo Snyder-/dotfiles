@@ -1,5 +1,6 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
+set scrolloff=4               " Keep at least 4 lines below cursor"
 
 call plug#begin('~/.vim/plugged')
 
@@ -7,18 +8,18 @@ call plug#begin('~/.vim/plugged')
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-rails'
+  Plug 'tpope/vim-bundler'
   Plug 'vim-ruby/vim-ruby'
   Plug 'skalnik/vim-vroom'
-  Plug 'jiangmiao/auto-pairs'
   Plug 'scrooloose/nerdtree'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'christoomey/vim-tmux-runner'
   Plug 'kien/ctrlp.vim'
+  Plug 'tpope/vim-commentary'
   Plug 'thoughtbot/vim-rspec'
   Plug 'tpope/vim-dispatch'
+  Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-endwise'
-  Plug 'garbas/vim-snipmate'
-  Plug 'MarcWeber/vim-addon-mw-utils' " snipmate dependency
 
 call plug#end()
 
@@ -75,3 +76,32 @@ map <Leader>t :call RunNearestSpec()<CR>
 map <Leader>s :call RunNearestSpec()<CR>
 map <Leader>l :call RunLastSpec()<CR>
 map <Leader>a :call RunAllSpecs()<CR>
+
+" Edit Vimrc.local
+map <Leader>vi :tabedit ~/.vimrc.local<CR>
+
+" Edit tmux.conf.local
+map <Leader>vt :tabedit ~/.tmux.conf.local<CR>
+
+" Source in changes to Vimrc.local
+map <Leader>sv :source ~/.vimrc.local<CR>
+
+" Type jk to escape insert mode
+imap jk <esc>
+
+" Escape insert and write buffer
+imap <C-c> <esc>:w<cr>
+
+" Make CtrlP use ag for listing the files. Way faster and no useless files.
+let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor -g ""'
+let g:ctrlp_use_caching = 0
+
+" Let 0 go to beginning of non whitespace
+nnoremap 0 ^
+
+augroup rubypath
+  autocmd!
+
+" Allow GF to try and add suffix to filename
+  autocmd FileType ruby setlocal suffixesadd+=.rb
+augroup END
