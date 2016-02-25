@@ -1,0 +1,102 @@
+set nocompatible
+set autoindent
+set autoread
+set autowrite       " Automatically save before commands like :next and :make
+set backspace=2
+if has("autocmd")
+  filetype indent plugin on
+endif
+if exists('+breakindent')
+  set breakindent showbreak=\ +
+endif
+set cmdheight=2
+setglobal commentstring=#\ %s
+set complete-=i     " Searching includes can be slow
+set dictionary+=/usr/share/dict/words
+set display=lastline
+if has("eval")
+  let &fileencodings = substitute(&fileencodings,"latin1","cp1252","")
+endif
+set fileformats=unix,dos,mac
+set foldmethod=marker
+set foldopen+=jump
+if v:version + has("patch541") >= 704
+  set formatoptions+=j
+endif
+set grepprg=grep\ -rnH\ --exclude='.*.swp'\ --exclude='*~'\ --exclude=tags
+if has("eval")
+  let &highlight = substitute(&highlight,'NonText','SpecialKey','g')
+endif
+set history=200
+set incsearch       " Incremental search
+set laststatus=2    " Always show status line
+set lazyredraw
+set linebreak
+if (&termencoding ==# 'utf-8' || &encoding ==# 'utf-8') && version >= 700
+  let &listchars = "tab:\u21e5\u00b7,trail:\u2423,extends:\u21c9,precedes:\u21c7,nbsp:\u26ad"
+  let &fillchars = "vert:\u259a,fold:\u00b7"
+else
+  set listchars=tab:>\ ,trail:-,extends:>,precedes:<
+endif
+if exists('+macmeta')
+  set macmeta
+endif
+set mouse=nvi
+set mousemodel=popup
+set pastetoggle=<F2>
+set printoptions=paper:letter
+set scrolloff=1
+set shiftround
+set showcmd         " Show (partial) command in status line.
+set showmatch       " Show matching brackets.
+set sidescrolloff=5
+set smartcase       " Case insensitive searches become sensitive with capitals
+set smarttab        " sw at the start of the line, sts everywhere else
+if exists("+spelllang")
+  set spelllang=en_us
+endif
+set spellfile=~/.vim/spell/en.utf-8.add
+setglobal tags=./tags;
+set timeoutlen=1200 " A little bit more time for macros
+set ttimeoutlen=50  " Make Esc work faster
+if exists('+undofile')
+  set undofile
+endif
+if v:version >= 700
+  set viminfo=!,'20,<50,s10,h
+endif
+set visualbell
+set virtualedit=block
+set wildmenu
+set wildmode=longest:full,full
+set wildignore+=tags,.*.un~,*.pyc
+set winaltkeys=no
+
+if !empty($SUDO_USER) && $USER !=# $SUDO_USER
+  set viminfo=
+  set directory-=~/tmp
+  set backupdir-=~/tmp
+endif
+
+if !has("gui_running") && $DISPLAY == '' || !has("gui")
+  set mouse=
+endif
+
+if $TERM =~ '^screen'
+  if exists("+ttymouse") && &ttymouse == ''
+    set ttymouse=xterm
+  endif
+  if $TERM != 'screen.linux' && &t_Co == 8
+    set t_Co=16
+  endif
+endif
+
+if has("dos16") || has("dos32") || has("win32") || has("win64")
+  if $PATH =~? 'cygwin' && ! exists("g:no_cygwin_shell")
+    set shell=bash
+    set shellpipe=2>&1\|tee
+    set shellslash
+  endif
+elseif has("mac")
+  set backupskip+=/private/tmp/*
+endif

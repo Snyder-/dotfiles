@@ -1,25 +1,35 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
-set scrolloff=4               " Keep at least 4 lines below cursor"
+if filereadable(expand("~/.vimoptions.local"))
+  source ~/.vimoptions.local
+endif
 
 call plug#begin('~/.vim/plugged')
 
-  Plug 'vim-airline/vim-airline'
-  Plug 'tpope/vim-fugitive'
-  Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-rails'
-  Plug 'tpope/vim-bundler'
-  Plug 'vim-ruby/vim-ruby'
-  Plug 'skalnik/vim-vroom'
-  Plug 'scrooloose/nerdtree'
+  Plug 'SirVer/ultisnips'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'christoomey/vim-tmux-runner'
+  Plug 'ecomba/vim-ruby-refactoring'
+  Plug 'ggreer/the_silver_searcher'
+  Plug 'honza/vim-snippets'
   Plug 'kien/ctrlp.vim'
-  Plug 'tpope/vim-commentary'
+  Plug 'nelstrom/vim-textobj-rubyblock'
+  Plug 'scrooloose/nerdtree'
+  Plug 'skalnik/vim-vroom'
   Plug 'thoughtbot/vim-rspec'
+  Plug 'tmhedberg/matchit'
+  Plug 'tpope/vim-bundler'
+  Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
-  Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-endwise'
+  Plug 'tpope/vim-eunuch'
+  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-rails'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-unimpaired'
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-ruby/vim-ruby'
+  Plug 'kana/vim-textobj-user'
+  Plug 'rizzatti/dash.vim'
 
 call plug#end()
 
@@ -27,6 +37,10 @@ call plug#end()
 let g:solarized_termcolors=256
 set t_Co=16
 syntax enable
+
+" Set Search Highlighting Colors
+set hlsearch
+hi Search cterm=NONE ctermfg=grey ctermbg=blue
 
 set guifont=Anonymice\ Powerline:h20
 let g:airline_powerline_fonts = 1
@@ -58,7 +72,7 @@ let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
 
-nnoremap <C-e> :NERDTreeToggle<CR>
+nnoremap <Leader>d :NERDTreeToggle<CR>
 
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
@@ -69,6 +83,9 @@ nnoremap <leader>= :wincmd =<cr>
 
 nnoremap <leader>irb :VtrOpenRunner {'orientation': 'h', 'percentage': 50, 'cmd': 'irb'}<cr>
 nnoremap <leader>va :VtrAttachToPane <cr>
+
+" turn on undo files
+set noundofile
 
 let g:rspec_command = "VtrSendCommandToRunner! rspec {spec}"
 
@@ -105,3 +122,29 @@ augroup rubypath
 " Allow GF to try and add suffix to filename
   autocmd FileType ruby setlocal suffixesadd+=.rb
 augroup END
+
+" Move lines up and down
+nmap <Leader>k [e
+nmap <Leader>j ]e
+vmap <Leader>k [egv
+vmap <Leader>j ]egv
+
+" Vim-ruby-refactoring mappings
+nnoremap <leader>map  :RAddParameter<cr>
+nnoremap <leader>mcpc :RConvertPostConditional<cr>
+nnoremap <leader>mel  :RExtractLet<cr>
+vnoremap <leader>mec  :RExtractConstant<cr>
+vnoremap <leader>melv :RExtractLocalVariable<cr>
+nnoremap <leader>mit  :RInlineTemp<cr>
+vnoremap <leader>mrlv :RRenameLocalVariable<cr>
+vnoremap <leader>mriv :RRenameInstanceVariable<cr>
+vnoremap <leader>mem  :RExtractMethod<cr>
+
+" Set ultisnips triggers
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+" Dash integration
+" search docs for word under cursor
+nmap <silent> <leader>m <Plug>DashGlobalSearch
