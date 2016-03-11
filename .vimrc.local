@@ -30,17 +30,20 @@ call plug#begin('~/.vim/plugged')
   Plug 'vim-ruby/vim-ruby'
   Plug 'kana/vim-textobj-user'
   Plug 'rizzatti/dash.vim'
+  Plug 'altercation/vim-colors-solarized'
 
 call plug#end()
 
 " Airline - Integrate with fonts
 let g:solarized_termcolors=256
+set background=light
+colorscheme solarized
 set t_Co=16
 syntax enable
 
 " Set Search Highlighting Colors
-set hlsearch
-hi Search cterm=NONE ctermfg=grey ctermbg=blue
+"set hlsearch
+"hi Search cterm=NONE ctermfg=grey ctermbg=blue
 
 set guifont=Anonymice\ Powerline:h20
 let g:airline_powerline_fonts = 1
@@ -89,7 +92,7 @@ set noundofile
 
 let g:rspec_command = "VtrSendCommandToRunner! rspec {spec}"
 
-map <Leader>t :call RunNearestSpec()<CR>
+map <Leader>t :call RunCurrentSpecFile()<CR>
 map <Leader>s :call RunNearestSpec()<CR>
 map <Leader>l :call RunLastSpec()<CR>
 map <Leader>a :call RunAllSpecs()<CR>
@@ -121,6 +124,7 @@ augroup rubypath
 
 " Allow GF to try and add suffix to filename
   autocmd FileType ruby setlocal suffixesadd+=.rb
+  autocmd FileType eruby let g:UltiSnipsAddFiletypes="html"
 augroup END
 
 " Move lines up and down
@@ -148,3 +152,4 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " Dash integration
 " search docs for word under cursor
 nmap <silent> <leader>m <Plug>DashGlobalSearch
+
