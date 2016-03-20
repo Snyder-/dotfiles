@@ -4,18 +4,28 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
+  Plug 'Ecomba/Vim-Ruby-Refactoring'
+  Plug 'Ggreer/The_silver_searcher'
   Plug 'SirVer/ultisnips'
+  Plug 'altercation/vim-colors-solarized'
+  Plug 'christoomey/vim-sort-motion'
+  Plug 'christoomey/vim-system-copy'
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'christoomey/vim-tmux-runner'
-  Plug 'ecomba/vim-ruby-refactoring'
-  Plug 'ggreer/the_silver_searcher'
+  Plug 'craigemery/vim-autotag'
   Plug 'honza/vim-snippets'
+  Plug 'kana/vim-textobj-entire'
+  Plug 'kana/vim-textobj-indent'
+  Plug 'kana/vim-textobj-line'
+  Plug 'kana/vim-textobj-user'
   Plug 'kien/ctrlp.vim'
   Plug 'nelstrom/vim-textobj-rubyblock'
+  Plug 'rizzatti/dash.vim'
   Plug 'scrooloose/nerdtree'
   Plug 'skalnik/vim-vroom'
   Plug 'thoughtbot/vim-rspec'
   Plug 'tmhedberg/matchit'
+  Plug 'tommcdo/vim-exchange'
   Plug 'tpope/vim-bundler'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-dispatch'
@@ -28,11 +38,13 @@ call plug#begin('~/.vim/plugged')
   Plug 'tpope/vim-unimpaired'
   Plug 'vim-airline/vim-airline'
   Plug 'vim-ruby/vim-ruby'
-  Plug 'kana/vim-textobj-user'
-  Plug 'rizzatti/dash.vim'
-  Plug 'altercation/vim-colors-solarized'
+  Plug 'vim-scripts/ReplaceWithRegister'
+  Plug 'whatyouhide/vim-textobj-erb'
 
 call plug#end()
+
+" Set Relative Numbering
+set relativenumber
 
 " Airline - Integrate with fonts
 let g:solarized_termcolors=256
@@ -106,11 +118,13 @@ map <Leader>vt :tabedit ~/.tmux.conf.local<CR>
 " Source in changes to Vimrc.local
 map <Leader>sv :source ~/.vimrc.local<CR>
 
-" Type jk to escape insert mode
-imap jk <esc>
+" Type jj to escape insert mode
+imap jj <esc>
 
 " Escape insert and write buffer
+" and allow control c to save in normal
 imap <C-c> <esc>:w<cr>
+nmap <C-c> <esc>:w<cr>
 
 " Make CtrlP use ag for listing the files. Way faster and no useless files.
 let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor -g ""'
@@ -127,6 +141,36 @@ augroup rubypath
   autocmd FileType eruby let g:UltiSnipsAddFiletypes="html"
 augroup END
 
+" Reload chrome after every save to web files
+" Uses chrome-cli, brew install chrome-cli
+augroup html
+  autocmd!
+  autocmd BufWritePost *.html call ReloadChrome()
+  autocmd BufWritePost *.md call ReloadChrome()
+  autocmd BufWritePost *.erb call ReloadChrome()
+  autocmd BufWritePost *.css call ReloadChrome()
+  autocmd BufWritePost *.scss call ReloadChrome()
+  "Assume sass is being precompiled and will be slow to compile
+  autocmd BufWritePost *.sass call Wait()|call ReloadChrome()
+  autocmd BufWritePost *.js call ReloadChrome()
+  fun! ReloadChrome()
+   silent !chrome-cli reload
+  endfun
+  fun! Wait()
+    sleep 1500m
+  endfun
+augroup END
+
+"Open current file in browser
+nmap <Leader>o :call OpenCurrentFileInChrome(expand('%:p:h'), expand('%'))<CR>
+fun! OpenCurrentFileInChrome(path, filename)
+  execute 'silent !chrome-cli open file://' . a:path . '/' . a:filename
+  call ReDraw()
+endfun
+fun! ReDraw()
+  redraw!
+endfun
+
 " Move lines up and down
 nmap <Leader>k [e
 nmap <Leader>j ]e
@@ -134,7 +178,8 @@ vmap <Leader>k [egv
 vmap <Leader>j ]egv
 
 " Vim-ruby-refactoring mappings
-nnoremap <leader>map  :RAddParameter<cr>
+nnoremap <leader>rp   :RAddParameter<cr>
+vnoremap <leader>m    :RExtractMethod<cr>
 nnoremap <leader>mcpc :RConvertPostConditional<cr>
 nnoremap <leader>mel  :RExtractLet<cr>
 vnoremap <leader>mec  :RExtractConstant<cr>
@@ -142,7 +187,6 @@ vnoremap <leader>melv :RExtractLocalVariable<cr>
 nnoremap <leader>mit  :RInlineTemp<cr>
 vnoremap <leader>mrlv :RRenameLocalVariable<cr>
 vnoremap <leader>mriv :RRenameInstanceVariable<cr>
-vnoremap <leader>mem  :RExtractMethod<cr>
 
 " Set ultisnips triggers
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -153,3 +197,16 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " search docs for word under cursor
 nmap <silent> <leader>m <Plug>DashGlobalSearch
 
+" Set vim-unimpaired defaults
+set cursorline cursorcolumn "toggle cox
+set nonumber "toggle con
+" map <F3> :echo 'Current time is ' . strftime('%c')<CR>
+
+" Substitute under cursor
+nnoremap <Leader>cw :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>
+
+" Replace with Global copy
+nmap <leader>gr "*gr
+
+" More mappings for text-obj-ruby
+let g:textobj_ruby_more_mappings=1
