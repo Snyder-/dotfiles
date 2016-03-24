@@ -96,13 +96,16 @@ autocmd VimResized * :wincmd =
 nnoremap <leader>- :wincmd _<cr>:wincmd \|<cr>
 nnoremap <leader>= :wincmd =<cr>
 
-nnoremap <leader>irb :VtrOpenRunner {'orientation': 'h', 'percentage': 50, 'cmd': 'irb'}<cr>
+map <leader>sl :VtrSendLinesToRunner!<cr>
 nnoremap <leader>va :VtrAttachToPane <cr>
+map <leader>q :VtrKillRunner<cr>
+nmap <leader>rf :VtrSendFile!<cr>
+map <leader>irb :VtrOpenRunner { 'orientation': 'h', 'cmd': 'irb', 'percentage': '50'}<cr>
 
-" turn on undo files
+" turn off creating undo edit files
 set noundofile
 
-let g:rspec_command = "VtrSendCommandToRunner! rspec {spec}"
+let g:rspec_command = "VtrSendCommand! rspec {spec}"
 
 map <Leader>t :call RunCurrentSpecFile()<CR>
 map <Leader>s :call RunNearestSpec()<CR>
