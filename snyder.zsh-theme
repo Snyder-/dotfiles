@@ -1,0 +1,1 @@
+/Users/seanmsnyder/.oh-my-zsh/themes/snyder.zsh-theme

@@ -91,6 +91,10 @@ let g:airline_symbols.linenr = ''
 " Set vim-unimpaired defaults
 set cursorline cursorcolumn "toggle cox
 set nonumber "toggle con
+" User Ack instead of grep
+set grepprg=ack
+nnoremap fn :cn<cr>
+nnoremap fp :cp<cr>
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
 " zoom a vim pane, <C-w>= to re-balance
@@ -119,10 +123,36 @@ let g:rspec_command = "VtrSendCommand! rspec {spec}"
 map <Leader>t :call RunCurrentSpecFile()<CR>
 map <Leader>s :call RunNearestSpec()<CR>
 map <Leader>l :call RunLastSpec()<CR>
-map <Leader>a :call RunAllSpecs()<CR>
+map <Leader>a :call RunAllSpecs()<cr>
+map <Leader>tf :call RunCurrentSpecFileAndFocus()<CR>
+map <Leader>sf :call RunNearestSpecAndFocus()<CR>
+map <Leader>lf :call RunLastSpecAndFocus()<CR>
+map <Leader>af :call RunAllTestAndFocus()<cr>
+
+fun! RunCurrentSpecFileAndFocus()
+  call RunCurrentSpecFile()
+  :VtrFocusRunner
+endfun
+
+fun! RunNearestSpecAndFocus()
+  call RunNearestSpec()
+  :VtrFocusRunner
+endfun
+
+fun! RunLastSpecAndFocus()
+  call RunLastSpec()
+  :VtrFocusRunner
+endfun
+
+fun! RunAllTestAndFocus()
+  call RunAllSpecs()
+  :VtrFocusRunner
+endfun
+
 
 " Quick Access Vimrc and Tmux
 map <Leader>vi :tabedit ~/.vimrc.local<CR>
+map <Leader>vz :tabedit ~/.oh-my-zsh/themes/snyder.zsh-theme<CR>
 map <Leader>sv :source ~/.vimrc.local<CR>
 " Source tmux with <ctr-s>r
 map <Leader>vt :tabedit ~/.tmux.conf.local<CR>
@@ -229,3 +259,10 @@ nnoremap 0 ^
 nnoremap Q ZZ
 " Lets :Q be the same as :q
 command! Q q
+
+nmap <Leader>n [m
+nmap <Leader>nn [m
+
+map <leader>e :e <C-R>=expand("%:p:h") . '/'<cr><cr>
+map <leader>es :split <C-R>=expand("%:p:h") . '/'<cr><cr>
+map <leader>ev :vnew <C-R>=expand("%:p:h") . '/'<cr><cr>

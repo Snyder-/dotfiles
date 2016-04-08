@@ -1,12 +1,10 @@
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/seanmsnyder/.oh-my-zsh
-source /usr/local/opt/chruby/share/chruby/chruby.sh
-source /usr/local/opt/chruby/share/chruby/auto.sh
 eval "$(hub alias -s)"
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
-ZSH_THEME="robbyrussell"
+ZSH_THEME="snyder"
 plugins=(git ruby rake rails bundler osx heroku chruby tmux)
 
 # User configuration
@@ -17,6 +15,7 @@ export PATH=$PATH:$(npm config --global get prefix)/bin
 # export MANPATH="/usr/local/man:$MANPATH"
 # Add Scripts to PATH
 export PATH="$HOME/scripts:$PATH"
+export PATH="$HOME/scripts/rbporo:$PATH"
 export PATH=$PATH:/Users/seanmsnyder/.gem/ruby/2.3.0/bin/
 
 source $ZSH/oh-my-zsh.sh
@@ -24,7 +23,7 @@ source /usr/local/opt/chruby/share/chruby/chruby.sh
 source /usr/local/opt/chruby/share/chruby/auto.sh
 
 # Set default ruby for chruby
-chruby 2.3.0
+chruby ruby-2.3.0
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
