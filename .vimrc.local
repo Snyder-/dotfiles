@@ -104,7 +104,6 @@ nnoremap <leader>= :wincmd =<cr>
 " Vim-Nerdtree mappings
 nnoremap <Leader>d :NERDTreeToggle<CR>
 
-
 " Vim-Tmux-Runner mappings
 map      <leader>sl  :VtrSendLinesToRunner!<cr>
 nnoremap <leader>va  :VtrAttachToPane <cr>
@@ -149,16 +148,12 @@ fun! RunAllTestAndFocus()
   :VtrFocusRunner
 endfun
 
-
 " Quick Access Vimrc and Tmux
 map <Leader>vi :tabedit ~/.vimrc.local<CR>
-map <Leader>vz :tabedit ~/.oh-my-zsh/themes/snyder.zsh-theme<CR>
 map <Leader>sv :source ~/.vimrc.local<CR>
 " Source tmux with <ctr-s>r
 map <Leader>vt :tabedit ~/.tmux.conf.local<CR>
 map <Leader>vb :tabedit ~/.bash_profile<cr>
-map <Leader>sb :source ~/.bash_profile<cr>
-
 
 augroup rubypath
   autocmd!

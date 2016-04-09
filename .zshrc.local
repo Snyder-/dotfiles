@@ -1,6 +1,6 @@
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/seanmsnyder/.oh-my-zsh
-eval "$(hub alias -s)"
+# eval "$(hub alias -s)"
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
